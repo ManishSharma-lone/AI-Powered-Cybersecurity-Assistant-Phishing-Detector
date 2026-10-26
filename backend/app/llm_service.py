@@ -20,7 +20,7 @@ except ImportError:
     StrOutputParser = None
     ChatGroq = None
 
-DEFAULT_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 
 def generate_local_explanation(
