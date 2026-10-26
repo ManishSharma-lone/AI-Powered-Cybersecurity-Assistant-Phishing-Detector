@@ -7,6 +7,7 @@ Falls back seamlessly to a local heuristic generator when offline or unconfigure
 
 import os
 import json
+import logging
 from typing import List, Dict, Any, Tuple
 
 try:
@@ -20,7 +21,13 @@ except ImportError:
     StrOutputParser = None
     ChatGroq = None
 
-DEFAULT_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+logger = logging.getLogger(__name__)
+
+DEFAULT_MODEL = "qwen/qwen3.8-27b"
+CANDIDATE_MODELS = [
+    "qwen/qwen3.8-27b",
+    "openai/gpt-oss-20b",
+]
 
 
 def generate_local_explanation(
@@ -125,34 +132,46 @@ async def get_explanation(
             "Local Heuristic Engine (Offline Safe)"
         )
 
-    try:
-        # Initialize LangChain Groq Chat Model
-        llm = ChatGroq(
-            api_key=api_key,
-            model_name=DEFAULT_MODEL,
-            temperature=0.2,
-            max_tokens=400,
-            timeout=8.0
-        )
+    preferred_model = os.getenv("GROQ_MODEL", "").strip() or DEFAULT_MODEL
+    models_to_try = [preferred_model]
+    for m in CANDIDATE_MODELS:
+        if m not in models_to_try:
+            models_to_try.append(m)
 
-        # Build LangChain LCEL chain: Prompt -> LLM -> StrOutputParser
-        chain = ANALYSIS_PROMPT | llm | StrOutputParser()
+    last_error = None
+    for model_name in models_to_try:
+        try:
+            # Initialize LangChain Groq Chat Model
+            llm = ChatGroq(
+                api_key=api_key,
+                model_name=model_name,
+                temperature=0.2,
+                max_tokens=400,
+                timeout=12.0
+            )
 
-        # Execute chain asynchronously
-        explanation = await chain.ainvoke({
-            "risk_level": risk_level,
-            "risk_score": risk_score,
-            "indicators_json": json.dumps([i.get("description") for i in indicators]),
-            "url_flags_json": json.dumps([u.get("flags") for u in urls]),
-            "untrusted_message": message[:2000]
-        })
+            # Build LangChain LCEL chain: Prompt -> LLM -> StrOutputParser
+            chain = ANALYSIS_PROMPT | llm | StrOutputParser()
 
-        return explanation.strip(), True, f"LangChain + Groq ({DEFAULT_MODEL})"
+            # Execute chain asynchronously
+            explanation = await chain.ainvoke({
+                "risk_level": risk_level,
+                "risk_score": risk_score,
+                "indicators_json": json.dumps([i.get("description") for i in indicators]),
+                "url_flags_json": json.dumps([u.get("flags") for u in urls]),
+                "untrusted_message": message[:2000]
+            })
 
-    except Exception:
-        # Network error, invalid key, or rate limit -> seamless local fallback
-        return (
-            generate_local_explanation(risk_level, risk_score, indicators, urls),
-            False,
-            "Local Heuristic Engine (LangChain Fallback)"
-        )
+            if explanation and explanation.strip():
+                return explanation.strip(), True, f"LangChain + Groq ({model_name})"
+        except Exception as exc:
+            last_error = exc
+            logger.warning(f"Groq invocation failed with model '{model_name}': {exc}")
+            continue
+
+    logger.warning(f"All Groq models failed ({last_error}). Falling back to local heuristic engine.")
+    return (
+        generate_local_explanation(risk_level, risk_score, indicators, urls),
+        False,
+        "Local Heuristic Engine (LangChain Fallback)"
+    )

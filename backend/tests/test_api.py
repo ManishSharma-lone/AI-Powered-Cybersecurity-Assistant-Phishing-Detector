@@ -41,3 +41,23 @@ def test_history_flow():
     response = client.get("/api/history")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+def test_analyze_with_llm():
+    payload = {
+        "message": "Immediate alert: unauthorized transaction detected. Visit http://security-update-bank.com to confirm identity.",
+        "enable_llm": True,
+        "save_history": True
+    }
+    response = client.post("/api/analyze", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["risk_score"] > 0
+    assert len(data["explanation"]) > 0
+    assert data["llm_provider"] is not None
+    # Verify history item was saved
+    assert data["history_id"] is not None
+
+    # Test deleting the record
+    del_resp = client.delete(f"/api/history/{data['history_id']}")
+    assert del_resp.status_code == 200
+
