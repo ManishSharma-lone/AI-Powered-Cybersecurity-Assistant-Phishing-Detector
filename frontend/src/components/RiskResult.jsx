@@ -31,7 +31,7 @@ export default function RiskResult({ result }) {
         cardBg: 'bg-gradient-to-br from-rose-50 via-red-50 to-orange-50 dark:from-rose-950/80 dark:via-red-950/60 dark:to-slate-900 border-2 border-red-400 dark:border-red-500 shadow-xl shadow-red-500/10',
         badge: 'bg-red-600 text-white shadow-md shadow-red-600/30',
         color: '#ef4444',
-        trackColor: darkMode => darkMode ? '#3f1118' : '#fee2e2',
+        trackColor: '#3f1118',
         icon: ShieldAlert,
         title: '🚨 HIGH RISK — PHISHING OR SCAM DETECTED'
       }
@@ -40,7 +40,7 @@ export default function RiskResult({ result }) {
         cardBg: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-950/80 dark:via-yellow-950/60 dark:to-slate-900 border-2 border-amber-400 dark:border-amber-500 shadow-xl shadow-amber-500/10',
         badge: 'bg-amber-600 text-white shadow-md shadow-amber-600/30',
         color: '#f59e0b',
-        trackColor: darkMode => darkMode ? '#3c2409' : '#fef3c7',
+        trackColor: '#3c2409',
         icon: AlertTriangle,
         title: '⚠️ MEDIUM RISK — SUSPICIOUS SIGNS FOUND'
       }
@@ -48,7 +48,7 @@ export default function RiskResult({ result }) {
         cardBg: 'bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 dark:from-emerald-950/80 dark:via-teal-950/60 dark:to-slate-900 border-2 border-emerald-400 dark:border-emerald-500 shadow-xl shadow-emerald-500/10',
         badge: 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30',
         color: '#10b981',
-        trackColor: darkMode => darkMode ? '#063024' : '#d1fae5',
+        trackColor: '#063024',
         icon: ShieldCheck,
         title: '✅ LOW RISK — MESSAGE APPEARS SAFE'
       }
@@ -59,7 +59,7 @@ export default function RiskResult({ result }) {
   const strokeDashoffset = circumference - (risk_score / 100) * circumference
 
   return (
-    <div className={`rounded-3xl p-6 sm:p-8 ${theme.cardBg} transition-all`}>
+    <div className={`rounded-3xl p-6 sm:p-8 ${theme.cardBg} transition-all animate-risk-in card-highlight overflow-hidden`}>
       <div className="flex flex-col md:flex-row items-center gap-8">
         {/* Animated Radial Score Gauge */}
         <div className="relative flex flex-col items-center justify-center shrink-0">

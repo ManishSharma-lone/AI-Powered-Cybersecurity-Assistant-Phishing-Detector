@@ -12,8 +12,8 @@ export default function HistoryModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
-      <div className="color-card w-full max-w-2xl rounded-3xl p-6 sm:p-7 space-y-4 shadow-2xl max-h-[85vh] flex flex-col bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn">
+      <div className="color-card animate-modal-in w-full max-w-2xl rounded-3xl p-6 sm:p-7 space-y-4 shadow-2xl max-h-[85vh] flex flex-col bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-800 card-highlight overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b-2 border-indigo-100 dark:border-slate-800 shrink-0">
           <div className="flex items-center gap-2.5">

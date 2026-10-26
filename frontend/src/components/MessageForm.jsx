@@ -79,10 +79,10 @@ export default function MessageForm({
   }
 
   return (
-    <div className="color-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-2xl bg-white/95 dark:bg-slate-900/95">
+    <div className="color-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-2xl bg-white/95 dark:bg-slate-900/95 card-highlight">
       {/* Animated Scan Beam */}
       {loading && (
-        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 animate-scan-beam z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-1.5 loading-bar z-10 pointer-events-none" />
       )}
 
       {/* Header and 1-Click Samples */}
@@ -214,15 +214,15 @@ export default function MessageForm({
           <button
             type="submit"
             disabled={!message.trim() || loading}
-            className={`w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2.5 shadow-xl ${
+            className={`spin-border w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2.5 shadow-xl ${
               !message.trim() || loading
                 ? 'bg-slate-300 dark:bg-slate-800 text-slate-600 dark:text-slate-500 cursor-not-allowed border-2 border-slate-300 dark:border-slate-700'
-                : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/40 hover:shadow-indigo-500/60 cursor-pointer active:scale-[0.98]'
+                : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/40 hover:shadow-indigo-500/70 hover:shadow-2xl cursor-pointer active:scale-[0.98] animate-gradient-shift'
             }`}
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 rounded-full animate-spin" style={{border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white'}} />
                 <span>Scanning Message...</span>
               </>
             ) : (

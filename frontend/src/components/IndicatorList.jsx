@@ -48,7 +48,7 @@ export default function IndicatorList({ indicators }) {
   }
 
   return (
-    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-4 border-2 border-indigo-200 dark:border-indigo-900/60 shadow-lg">
+    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-4 border-2 border-indigo-200 dark:border-indigo-900/60 shadow-lg card-highlight overflow-hidden animate-fade-up">
       <div className="flex items-center justify-between pb-3 border-b-2 border-indigo-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
           <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -67,7 +67,8 @@ export default function IndicatorList({ indicators }) {
           return (
             <div
               key={index}
-              className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border-2 border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition space-y-3 shadow-xs"
+              className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border-2 border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition space-y-3 shadow-xs animate-stagger"
+              style={{ animationDelay: `${index * 80}ms` }}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">

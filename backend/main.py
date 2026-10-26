@@ -5,7 +5,8 @@ Exposes REST API endpoints for scam analysis, health checks, and history managem
 
 import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -52,9 +53,14 @@ app.add_middleware(
 )
 
 
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+
 @app.get("/", tags=["General"])
-def home():
-    """Confirm the service is running."""
+def home(request: Request):
+    """Confirm the service is running or serve frontend in production."""
+    if os.path.exists(frontend_dist) and "text/html" in request.headers.get("accept", ""):
+        from fastapi.responses import FileResponse
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
     return {"message": "AI Phishing Detection Assistant API is running"}
 
 
@@ -126,6 +132,24 @@ def clear_history():
     """Delete all scan history records."""
     count = clear_all_history()
     return {"message": f"Successfully cleared {count} history records"}
+
+
+# Mount built frontend static files if present (after all API routes)
+if os.path.exists(frontend_dist):
+    from fastapi.staticfiles import StaticFiles
+
+    assets_dir = os.path.join(frontend_dist, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}", tags=["Frontend"])
+    async def serve_spa(full_path: str):
+        if full_path.startswith("api") or full_path in ("docs", "redoc", "openapi.json"):
+            raise HTTPException(status_code=404, detail="Not found")
+        file_path = os.path.join(frontend_dist, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
 
 
 if __name__ == "__main__":

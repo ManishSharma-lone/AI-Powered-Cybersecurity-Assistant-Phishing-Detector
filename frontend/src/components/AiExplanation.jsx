@@ -13,7 +13,7 @@ export default function AiExplanation({ explanation, llmUsed, llmProvider }) {
   }
 
   return (
-    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-4 border-2 border-indigo-300 dark:border-indigo-800/80 shadow-xl relative overflow-hidden bg-white dark:bg-slate-900">
+    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-4 border-2 border-indigo-300 dark:border-indigo-800/80 shadow-xl relative overflow-hidden bg-white dark:bg-slate-900 card-highlight animate-fade-up">
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-indigo-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20">

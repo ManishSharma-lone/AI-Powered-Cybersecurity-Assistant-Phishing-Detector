@@ -27,7 +27,7 @@ export default function RecommendationList({ recommendations, disclaimer }) {
   }
 
   return (
-    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-5 border-2 border-emerald-300 dark:border-emerald-800/80 shadow-xl bg-white dark:bg-slate-900">
+    <div className="color-card rounded-3xl p-6 sm:p-8 space-y-5 border-2 border-emerald-300 dark:border-emerald-800/80 shadow-xl bg-white dark:bg-slate-900 card-highlight overflow-hidden animate-fade-up">
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-emerald-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/20">
@@ -72,11 +72,12 @@ export default function RecommendationList({ recommendations, disclaimer }) {
             <div
               key={index}
               onClick={() => toggleCheck(index)}
-              className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5 select-none shadow-xs hover:scale-[1.01] ${
+              className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5 select-none shadow-xs hover:scale-[1.01] animate-stagger ${
                 isDone
                   ? 'bg-emerald-100/90 dark:bg-emerald-950/40 border-emerald-500 dark:border-emerald-700 opacity-80'
                   : 'bg-white dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500'
               }`}
+              style={{ animationDelay: `${index * 70}ms` }}
             >
               <div
                 className={`w-6 h-6 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border-2 transition ${
@@ -103,7 +104,7 @@ export default function RecommendationList({ recommendations, disclaimer }) {
       </div>
 
       {disclaimer && (
-        <div className="mt-4 p-4.5 rounded-2xl bg-amber-100 dark:bg-amber-950/40 border-2 border-amber-400 dark:border-amber-700 flex items-start gap-3 shadow-xs">
+        <div className="mt-4 p-4 rounded-2xl bg-amber-100 dark:bg-amber-950/40 border-2 border-amber-400 dark:border-amber-700 flex items-start gap-3 shadow-xs">
           <AlertTriangle className="w-5 h-5 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
           <p className="text-xs sm:text-sm text-amber-950 dark:text-amber-100 leading-relaxed font-black">
             <strong className="text-amber-900 dark:text-amber-300 uppercase tracking-wide mr-1.5">Notice:</strong> {disclaimer}
