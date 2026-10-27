@@ -14,7 +14,7 @@ import SocBottomRow from './components/SocBottomRow'
 import IncidentModal from './components/IncidentModal'
 import { Shield, Sparkles, AlertOctagon } from 'lucide-react'
 
-const API_BASE = import.meta.env.VITE_API_BASE || ''
+const API_BASE = (import.meta.env.VITE_API_BASE || '').replace(/\/+$/, '')
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
